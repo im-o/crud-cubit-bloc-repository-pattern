@@ -26,6 +26,11 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSAPPTransportSecurity</key>
+	<dict>
+		<key></NSAllowsArbitraryLoads>
+		<true />
+	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
