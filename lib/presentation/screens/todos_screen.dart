@@ -29,7 +29,7 @@ class TodosScreen extends StatelessWidget {
           final todos = (state).todos;
           return SingleChildScrollView(
             child: Column(
-             children: todos!.map((e) => _todo(e, context)).toList(),
+              children: todos!.map((e) => _todo(e, context)).toList(),
             ),
           );
         },
@@ -38,22 +38,42 @@ class TodosScreen extends StatelessWidget {
   }
 
   Widget _todo(Todo? todo, context) {
-    loge("_todo : $todo");
     return Dismissible(
       key: Key("${todo?.id}"),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(bottom: BorderSide(color: Colors.grey))
-        ),
-        child: Row(
-          children: [
-            Text("${todo?.todoMessage}")
-          ],
-        ),
+      child: _todoTile(todo, context),
+      confirmDismiss: (_) async {
+        BlocProvider.of<TodosCubit>(context).changeCompletion(todo!);
+        return false;
+      },
+      background: Container(
+        color: Colors.indigo,
       ),
+    );
+  }
+
+  Widget _todoTile(Todo? todo, context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(bottom: BorderSide(color: Colors.grey))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [Text(todo?.todoMessage ?? ""), _completionIndicator(todo)],
+      ),
+    );
+  }
+
+  Widget _completionIndicator(Todo? todo) {
+    return Container(
+      width: 20.0,
+      height: 20.0,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50.0),
+          border: Border.all(
+              width: 4.0,
+              color: todo?.isCompleted ?? false ? Colors.green : Colors.red)),
     );
   }
 }

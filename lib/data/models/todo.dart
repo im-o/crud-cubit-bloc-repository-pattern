@@ -1,7 +1,7 @@
 class Todo {
-  final String todoMessage;
-  final bool isCompleted;
-  final int id;
+  String todoMessage;
+  bool isCompleted;
+  int id;
 
   Todo.fromJson(Map json)
       : todoMessage = json["todo"],
