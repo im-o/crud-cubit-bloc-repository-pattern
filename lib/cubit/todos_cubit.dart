@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:todo_app/data/models/todo.dart';
@@ -11,8 +13,10 @@ class TodosCubit extends Cubit<TodosState> {
   TodosCubit({required this.repository}) : super(TodosInitial());
 
   void fetchTodos() {
-    repository.fetchTodos().then((todos) {
-      emit(TodosLoaded(todos: todos));
+    Timer(Duration(seconds: 3), () {
+      repository.fetchTodos().then((todos) {
+        emit(TodosLoaded(todos: todos));
+      });
     });
   }
 }

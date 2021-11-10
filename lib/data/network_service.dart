@@ -1,16 +1,17 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:todo_app/util/util_function.dart';
 
 class NetworkService {
-  final baseUrl = "http://localhost:3000";
   Future<List<dynamic>?> fetchTodos() async {
     try {
-      final response = await get(Uri.parse(baseUrl + "/todos"));
-      print(response.body);
-      jsonDecode(response.body) as List;
+      final baseUrl = "http://localhost:3000";
+      final response = await http.get(Uri.parse(baseUrl + "/todos"));
+      loge(response.body);
+      return jsonDecode(response.body) as List;
     } catch (e) {
-      print("Error baseUrl : $e");
+      loge(e.toString());
       return [];
     }
   }
