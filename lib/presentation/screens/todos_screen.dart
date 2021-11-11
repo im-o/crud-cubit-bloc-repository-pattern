@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/constants/strings.dart';
 import 'package:todo_app/cubit/todos_cubit.dart';
 import 'package:todo_app/data/models/todo.dart';
-import 'package:todo_app/util/util_function.dart';
 
 class TodosScreen extends StatelessWidget {
   @override
@@ -25,7 +24,8 @@ class TodosScreen extends StatelessWidget {
       ),
       body: BlocBuilder<TodosCubit, TodosState>(
         builder: (context, state) {
-          if (!(state is TodosLoaded)) return CircularProgressIndicator();
+          if (!(state is TodosLoaded))
+            return Center(child: CircularProgressIndicator());
           final todos = (state).todos;
           return SingleChildScrollView(
             child: Column(
@@ -38,15 +38,18 @@ class TodosScreen extends StatelessWidget {
   }
 
   Widget _todo(Todo? todo, context) {
-    return Dismissible(
-      key: Key("${todo?.id}"),
-      child: _todoTile(todo, context),
-      confirmDismiss: (_) async {
-        BlocProvider.of<TodosCubit>(context).changeCompletion(todo!);
-        return false;
-      },
-      background: Container(
-        color: Colors.indigo,
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, EDIT_TODO_ROUTE),
+      child: Dismissible(
+        key: Key("${todo?.id}"),
+        child: _todoTile(todo, context),
+        confirmDismiss: (_) async {
+          BlocProvider.of<TodosCubit>(context).changeCompletion(todo!);
+          return false;
+        },
+        background: Container(
+          color: Colors.indigo,
+        ),
       ),
     );
   }
