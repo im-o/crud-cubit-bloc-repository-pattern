@@ -39,4 +39,14 @@ class NetworkService {
       return null;
     }
   }
+
+  Future<bool?> deleteTodo(int id) async {
+    try {
+      await http.delete(Uri.parse(baseUrl + "/todos/$id"));
+      return true;
+    } catch (e) {
+      loge(e.toString());
+      return false;
+    }
+  }
 }
