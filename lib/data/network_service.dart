@@ -5,6 +5,7 @@ import 'package:todo_app/util/util_function.dart';
 
 class NetworkService {
   final baseUrl = "http://localhost:3000";
+
   Future<List<dynamic>?> fetchTodos() async {
     try {
       final response = await http.get(Uri.parse(baseUrl + "/todos"));
@@ -19,11 +20,23 @@ class NetworkService {
   Future<bool> patchTodo(Map<String, String> patchObj, int id) async {
     try {
       loge("EXECUTE PATCH: $patchObj");
-      await http.patch(Uri.parse(baseUrl+"/todos/$id"), body: patchObj);
+      await http.patch(Uri.parse(baseUrl + "/todos/$id"), body: patchObj);
       return true;
     } catch (e) {
       loge("EXECUTE ERROR: $e");
       return false;
+    }
+  }
+
+  Future<Map?> addTodo(Map<String, String> todoObj) async {
+    try {
+      final response =
+          await http.post(Uri.parse(baseUrl + "/todos"), body: todoObj);
+      loge(response.body);
+      return jsonDecode(response.body);
+    } catch (e) {
+      loge(e.toString());
+      return null;
     }
   }
 }
