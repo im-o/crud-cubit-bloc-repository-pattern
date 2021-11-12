@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toast/toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/cubit/add_todo_cubit.dart';
 
 class AddTodoScreen extends StatelessWidget {
-  TextEditingController _controller = TextEditingController();
+  final _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Add Todo"),
-      ),
+      appBar: AppBar(title: Text("Add Todo")),
       body: BlocListener<AddTodoCubit, AddTodoState>(
         listener: (context, state) {
           if (state is TodoAdded) {
             Navigator.pop(context);
             return;
           } else if (state is AddTodoError) {
-            Toast.show(
-              state.error,
-              context,
-              duration: 3,
+            Fluttertoast.showToast(
+              msg: state.error,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 3,
               backgroundColor: Colors.red,
-              gravity: Toast.CENTER,
+              fontSize: 16.0,
+              webPosition: "center",
             );
           }
         },

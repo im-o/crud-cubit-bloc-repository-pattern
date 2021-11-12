@@ -11,4 +11,6 @@ class EditTodoError extends EditTodoState {
   EditTodoError({required this.error});
 }
 
+class EditingTodo extends EditTodoState {}
+
 class TodoEdited extends EditTodoState {}

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:todo_app/cubit/todos_cubit.dart';
@@ -27,12 +29,15 @@ class EditTodoCubit extends Cubit<EditTodoState> {
       emit(EditTodoError(error: "Message is empty"));
       return;
     }
-    repository.updateTodo(todo, message).then((isEdited) {
-      if (isEdited ?? true) {
-        todo.todoMessage = message;
-        todosCubit.updateTodoList();
-        emit(TodoEdited());
-      }
+    emit(EditingTodo());
+    Timer(Duration(seconds: 2), () {
+      repository.updateTodo(todo, message).then((isEdited) {
+        if (isEdited ?? true) {
+          todo.todoMessage = message;
+          todosCubit.updateTodoList();
+          emit(TodoEdited());
+        }
+      });
     });
   }
 }

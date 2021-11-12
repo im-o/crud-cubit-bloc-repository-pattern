@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toast/toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app/cubit/edit_todo_cubit.dart';
 import 'package:todo_app/data/models/todo.dart';
 
@@ -19,12 +19,14 @@ class EditTodoScreen extends StatelessWidget {
         if (state is TodoEdited) {
           Navigator.pop(context);
         } else if (state is EditTodoError) {
-          Toast.show(
-            state.error,
-            context,
-            duration: 3,
+          Fluttertoast.showToast(
+            msg: state.error,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 3,
             backgroundColor: Colors.red,
-            gravity: Toast.CENTER,
+            fontSize: 16.0,
+            webPosition: "center",
           );
         }
       },
@@ -79,9 +81,16 @@ class EditTodoScreen extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.blue, borderRadius: BorderRadius.circular(10.0)),
       child: Center(
-        child: Text(
-          "Update Todo",
-          style: TextStyle(fontSize: 15.0, color: Colors.white),
+        child: BlocBuilder<EditTodoCubit, EditTodoState>(
+          builder: (context, state) {
+            if (state is EditingTodo)
+              return Center(
+                  child: CircularProgressIndicator(color: Colors.white));
+            return Text(
+              "Update Todo",
+              style: TextStyle(fontSize: 15.0, color: Colors.white),
+            );
+          },
         ),
       ),
     );
