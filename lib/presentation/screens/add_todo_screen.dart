@@ -10,12 +10,16 @@ class AddTodoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Add Todo")),
-      body: BlocListener<AddTodoCubit, AddTodoState>(
+      body: BlocConsumer<AddTodoCubit, AddTodoState>(
+        builder: (context, state) {
+          if (state is TodoAdded) Navigator.pop(context);
+          return Container(
+            margin: EdgeInsets.all(20.0),
+            child: _body(context),
+          );
+        },
         listener: (context, state) {
-          if (state is TodoAdded) {
-            Navigator.pop(context);
-            return;
-          } else if (state is AddTodoError) {
+          if (state is AddTodoError) {
             Fluttertoast.showToast(
               msg: state.error,
               toastLength: Toast.LENGTH_LONG,
@@ -27,10 +31,6 @@ class AddTodoScreen extends StatelessWidget {
             );
           }
         },
-        child: Container(
-          margin: EdgeInsets.all(20.0),
-          child: _body(context),
-        ),
       ),
     );
   }
@@ -39,8 +39,8 @@ class AddTodoScreen extends StatelessWidget {
     return Column(
       children: [
         TextField(
-          autofocus: true,
           controller: _controller,
+          autofocus: true,
           decoration: InputDecoration(hintText: "Enter todo message..."),
         ),
         SizedBox(

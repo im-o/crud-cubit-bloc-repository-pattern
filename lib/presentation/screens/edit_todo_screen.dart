@@ -14,63 +14,64 @@ class EditTodoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     _controller.text = todo.todoMessage;
 
-    return BlocListener<EditTodoCubit, EditTodoState>(
-      listener: (context, state) {
-        if (state is TodoEdited) {
-          Navigator.pop(context);
-        } else if (state is EditTodoError) {
-          Fluttertoast.showToast(
-            msg: state.error,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 3,
-            backgroundColor: Colors.red,
-            fontSize: 16.0,
-            webPosition: "center",
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Edit Todo"),
+        actions: [
+          InkWell(
+            onTap: () {
+              BlocProvider.of<EditTodoCubit>(context).deleteTodo(todo);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(Icons.delete),
+            ),
+          )
+        ],
+      ),
+      body: BlocConsumer<EditTodoCubit, EditTodoState>(
+        builder: (context, state) {
+          if (state is TodoEdited) Navigator.pop(context);
+          return Container(
+            margin: EdgeInsets.all(20.0),
+            child: _body(context),
           );
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Edit Todo"),
-          actions: [
-            InkWell(
-              onTap: () {
-                BlocProvider.of<EditTodoCubit>(context).deleteTodo(todo);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Icon(Icons.delete),
-              ),
-            )
-          ],
-        ),
-        body: _body(context),
+        },
+        listener: (context, state) {
+          if (state is EditTodoError) {
+            Fluttertoast.showToast(
+              msg: state.error,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 3,
+              backgroundColor: Colors.red,
+              fontSize: 16.0,
+              webPosition: "center",
+            );
+          }
+        },
       ),
     );
   }
 
   Widget _body(context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _controller,
-            autocorrect: true,
-            decoration: InputDecoration(hintText: "Enter todo message..."),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          InkWell(
-              onTap: () {
-                BlocProvider.of<EditTodoCubit>(context)
-                    .updateTodo(todo, _controller.text);
-              },
-              child: _updateBtn(context))
-        ],
-      ),
+    return Column(
+      children: [
+        TextField(
+          controller: _controller,
+          autocorrect: true,
+          decoration: InputDecoration(hintText: "Enter todo message..."),
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        InkWell(
+            onTap: () {
+              final message = _controller.text;
+              BlocProvider.of<EditTodoCubit>(context).updateTodo(todo, message);
+            },
+            child: _updateBtn(context))
+      ],
     );
   }
 

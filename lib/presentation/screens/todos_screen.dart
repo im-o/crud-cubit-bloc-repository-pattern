@@ -22,7 +22,8 @@ class TodosScreen extends StatelessWidget {
           )
         ],
       ),
-      body: BlocBuilder<TodosCubit, TodosState>(
+      body: BlocConsumer<TodosCubit, TodosState>(
+        listener: (context, state) {},
         builder: (context, state) {
           if (!(state is TodosLoaded))
             return Center(child: CircularProgressIndicator());
